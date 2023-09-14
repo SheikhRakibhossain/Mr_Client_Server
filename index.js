@@ -27,22 +27,29 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
     const userCollection = client.db("CarBoss").collection("user")
+    const serviceCollection = client.db("CarBoss").collection("services")
 
-    app.post('/users', async(req, res)=>{
-        const users = req.body;
-        console.log(users)
-        const result = await userCollection.insertOne(users)
-        res.send(result);
-
-    })
-    app.get('/users', async(req, res)=>{
-
-        const cursor =  userCollection.find();
-        const result = await cursor.toArray();
-        res.send(result)
+    app.post('/users', async (req, res) => {
+      const users = req.body;
+      console.log(users)
+      const result = await userCollection.insertOne(users)
+      res.send(result);
 
     })
+    app.get('/users', async (req, res) => {
 
+      const cursor = userCollection.find();
+      const result = await cursor.toArray();
+      res.send(result)
+
+    })
+    // services data get from mongodb
+    app.get('/services', async (req, res) => {
+      const cursor = serviceCollection.find();
+      const result = await cursor.toArray();
+      res.send(result)
+
+    })
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
@@ -56,11 +63,11 @@ run().catch(console.dir);
 
 
 
-app.get('/', (req, res)=>{
-    res.send('We are on going in the path')
+app.get('/', (req, res) => {
+  res.send('We are on going in the path')
 })
 
 
-app.listen(port, (req, res)=>{
-    console.log(`Server running on port ${port}`)
+app.listen(port, (req, res) => {
+  console.log(`Server running on port ${port}`)
 })
